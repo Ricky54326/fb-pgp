@@ -1,3 +1,3 @@
-import * as openpgp from 'openpgp/src/openpgp';
+import * as openpgp from 'openpgp';
 
 console.log(openpgp);
