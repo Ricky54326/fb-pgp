@@ -23,7 +23,7 @@ var options = FB.options({'appId': config.app_id,
 
 // configure express
 app.configure(function() {
-    app.set('port', process.env.PORT || 3000);
+    app.set('port', process.env.PORT || 8000);
     app.set('views', __dirname + '/views');
     app.set('view engine', 'ejs');
     app.use(express.favicon());
