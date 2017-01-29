@@ -2,14 +2,13 @@ var path = require('path');
 var webpack = require('webpack');
 
 module.exports = {
-  entry: [
-    'babel-polyfill',
-    './src/content',
-    './src/background'
-  ],
+  entry: {
+    content: './src/content',
+    background: './src/background'
+  },
   output: {
     path: __dirname + '/dist',
-    filename: '[name].js'
+    filename: '[name].bundle.js'
   },
   debug: true,
   devtool: 'source-map',

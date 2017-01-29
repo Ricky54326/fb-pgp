@@ -7,7 +7,7 @@
 
   "background": {
     "persistent": false,
-    "scripts": ["dist/background.js"]
+    "scripts": ["dist/background.bundle.js"]
   },
 
   "browser_action": {
@@ -24,7 +24,7 @@
     {
       "matches": ["*://*.messenger.com/*"],
       "run_at": "document_end",
-      "js": ["dist/content.js"]
+      "js": ["dist/content.bundle.js"]
     }
   ]
 }
