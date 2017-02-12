@@ -1,8 +1,12 @@
 const express = require('express'),
+      bodyParser = require('body-parser'),
       FB = require('fb'),
+      favicon = require('serve-favicon'),
       http = require('http'),
+      morgan = require('morgan'),
       path = require('path'),
       Step = require('step'),
+      session = require('express-session'),
       config = require('./secrets');
 
 const appId = config.appId;
@@ -13,6 +17,11 @@ if (!appId) {
 const appSecret = config.appSecret;
 if (!appSecret) {
   throw new Error("facebook appSecret required in secrets.js");
+}
+
+const sessionSecret = config.sessionSecret;
+if (!sessionSecret) {
+  throw new Error("server sessionSecret required in secrets.js");
 }
 
 const redirectUri = config.redirectUri;
@@ -30,26 +39,29 @@ const options = FB.options({
 const app = express();
 
 // configure express
-app.configure(() => {
-  app.set('port', process.env.PORT || 8000);
-  app.set('views', __dirname + '/views');
-  app.set('view engine', 'jade');
-  app.use(express.favicon());
-  app.use(express.logger('dev'));
-  app.use(express.cookieParser());
-  app.use(express.cookieSession({ secret: 'secret' }));
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(app.router);
-  app.use(express.static(path.join(__dirname, 'public')));
-});
+app.set('port', process.env.PORT || 8000);
+app.set('views', __dirname + '/views');
+app.set('view engine', 'jade');
+app.use(favicon(__dirname + '/assets/favicon.ico'));
+app.use(morgan('dev'));
+app.use(session({
+  resave: true,
+  saveUninitialized: true,
+  secret: sessionSecret
+}));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, 'public')));
 
 const index = (req, res) => {
   const accessToken = req.session.access_token;
+  const loginUrl = FB.getLoginUrl({
+    scope: 'user_friends, public_profile'
+  });
   res.render('index', {
     appId,
-    title: 'Pretty Good Messenger',
-    loginUrl: FB.getLoginUrl({ scope: 'user_friends, public_profile' })
+    loginUrl,
+    title: 'Pretty Good Messenger'
   });
 };
 
@@ -58,7 +70,7 @@ const login_callback = (req, res, next) => {
 
   if (req.query.error) {
     // user might have disallowed the app
-    return res.send('login-error ' + req.query.error_description);
+    return res.status(400).send('login-error ' + req.query.error_description);
   } else if (!code) {
     return res.redirect('/');
   }
@@ -73,7 +85,7 @@ const login_callback = (req, res, next) => {
       }, this);
     },
     function extendAccessToken (err, result) {
-      if (err) throw(err);
+      if (err) throw err;
       FB.napi('oauth/access_token', {
         client_id:          FB.options('appId'),
         client_secret:      FB.options('appSecret'),
@@ -82,7 +94,7 @@ const login_callback = (req, res, next) => {
       }, this);
     },
     function getFriends (err, result) {
-      if (err) return next(err);
+      if (err) throw err;
 
       req.session.access_token = result.access_token;
       req.session.expires = result.expires || 0;
@@ -116,7 +128,7 @@ const login_callback = (req, res, next) => {
     function showKeys (err, keys) {
       if (err) throw err;
       console.log(keys);
-      res.send(keys);
+      res.status(200).send(keys);
     }
   );
 };

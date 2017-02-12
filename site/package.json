@@ -25,9 +25,13 @@
   },
   "homepage": "https://github.com/Ricky54326/fb-pgp#readme",
   "dependencies": {
-    "express": "3.1.0",
+    "body-parser": "^1.16.1",
+    "express": "^4.14.1",
+    "express-session": "^1.15.1",
     "fb": "^1.1.1",
     "jade": "^1.11.0",
+    "morgan": "^1.8.1",
+    "serve-favicon": "^2.3.2",
     "step": "^1.0.0"
   }
 }
