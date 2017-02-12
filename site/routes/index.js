@@ -1,3 +1,4 @@
+const FB = require('fb');
 const login_callback = require('./callback');
 
 const index = appId => (req, res) => {
@@ -12,7 +13,7 @@ const index = appId => (req, res) => {
   });
 };
 
-module.exports = app => {
-  app.get('/', index);
+module.exports = (app, appId) => {
+  app.get('/', index(appId));
   app.get('/login/callback', login_callback);
 };
