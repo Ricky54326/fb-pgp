@@ -9,25 +9,19 @@ const express = require('express'),
       routes = require('./routes'),
       config = require('./secrets');
 
-const appId = config.appId;
-if (!appId) {
-  throw new Error("facebook appId required in secrets.js");
-}
+const requireInConfig = key => {
+  const value = config[key];
+  if (!value) {
+    throw new Error(`${key} required in secrets.js`);
+  } else {
+    return value;
+  }
+};
 
-const appSecret = config.appSecret;
-if (!appSecret) {
-  throw new Error("facebook appSecret required in secrets.js");
-}
-
-const sessionSecret = config.sessionSecret;
-if (!sessionSecret) {
-  throw new Error("server sessionSecret required in secrets.js");
-}
-
-const redirectUri = config.redirectUri;
-if (!redirectUri) {
-  throw new Error("facebook redirectUri required in secrets.js");
-}
+const appId = requireInConfig('appId');
+const appSecret = requireInConfig('appSecret');
+const sessionSecret = requireInConfig('sessionSecret');
+const redirectUri = requireInConfig('redirectUri');
 
 // set fb options
 const options = FB.options({
