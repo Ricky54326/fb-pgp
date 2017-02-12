@@ -26,8 +26,8 @@ const redirectUri = requireInConfig('redirectUri');
 // set fb options
 const options = FB.options({
   appId: config.appId,
-	appSecret: config.appSecret,
-	redirectUri: config.redirectUri
+  appSecret: config.appSecret,
+  redirectUri: config.redirectUri
 });
 
 const app = express();
