@@ -15,9 +15,11 @@
   },
 
   "permissions": [
-    "webNavigation",
-    "https://messenger.com/",
-    "https://ajax.googleapis.com/"
+      "webNavigation",
+      "https://messenger.com/",
+      "https://ajax.googleapis.com/",
+      "http://fb-pgp.com:8000/",
+      "https://www.facebook.com/"
   ],
 
   "content_scripts": [
