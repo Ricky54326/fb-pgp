@@ -22,18 +22,15 @@ module.exports = (req, res, next) => {
     },
     function extendAccessToken (err, result) {
       if (err) throw err;
+      const { access_token } = result;
       FB.napi('oauth/access_token', {
         client_id:          FB.options('appId'),
         client_secret:      FB.options('appSecret'),
         grant_type:         'fb_exchange_token',
-        fb_exchange_token:  result.access_token
-      }, this);
-    },
-    function setSession (err, result) {
-      res.status(200).send(JSON.stringify({
-        access_token,
-        expires
-      }));
+        fb_exchange_token:  access_token
+      }, response => {
+        res.status(200).send(JSON.stringify({ access_token }));
+      });
     }
   );
 };
