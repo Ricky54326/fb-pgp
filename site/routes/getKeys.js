@@ -2,7 +2,7 @@ const FB = require('fb');
 const Step = require('step');
 
 module.exports = (req, res, next) => {
-  const { access_token } = req.body;
+  const { access_token } = JSON.parse(req.body);
   if (!access_token) {
     res.status(400).send('Missing access token');
   } else {
