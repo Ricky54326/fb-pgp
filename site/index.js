@@ -36,8 +36,7 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(morgan('dev'));
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(bodyParser.text());
 app.use(express.static(path.join(__dirname, 'public')));
 
 routes(app, appId);
