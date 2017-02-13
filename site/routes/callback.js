@@ -30,8 +30,6 @@ module.exports = (req, res, next) => {
       }, this);
     },
     function setSession (err, result) {
-      req.session.access_token = result.access_token;
-      req.session.expires = result.expires || 0;
       res.status(200).send(JSON.stringify({
         access_token,
         expires
