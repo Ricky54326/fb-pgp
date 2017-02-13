@@ -12,11 +12,8 @@ module.exports = (req, res, next) => {
     function getFriends (err, result) {
       if (err) throw err;
 
-      req.session.access_token = result.access_token;
-      req.session.expires = result.expires || 0;
-
       const options = {
-        access_token: req.session.access_token
+        access_token: access_token
       };
       FB.napi('/me/friends', 'get', options, this);
     },
@@ -24,7 +21,7 @@ module.exports = (req, res, next) => {
       if (err) throw err;
       const friends = response.data;
       const options = {
-        access_token: req.session.access_token,
+        access_token: access_token,
         fields: 'public_key'
       };
       const group = this.group();

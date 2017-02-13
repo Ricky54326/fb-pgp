@@ -6,6 +6,7 @@ const express = require('express'),
       morgan = require('morgan'),
       path = require('path'),
       session = require('express-session'),
+      FileStore = require('session-file-store')(session),
       routes = require('./routes'),
       config = require('./secrets');
 
@@ -41,7 +42,8 @@ app.use(morgan('dev'));
 app.use(session({
   resave: true,
   saveUninitialized: true,
-  secret: sessionSecret
+  secret: sessionSecret,
+  store: new FileStore()
 }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
