@@ -5,8 +5,6 @@ const express = require('express'),
       http = require('http'),
       morgan = require('morgan'),
       path = require('path'),
-      session = require('express-session'),
-      FileStore = require('session-file-store')(session),
       routes = require('./routes'),
       config = require('./secrets');
 
@@ -21,7 +19,6 @@ const requireInConfig = key => {
 
 const appId = requireInConfig('appId');
 const appSecret = requireInConfig('appSecret');
-const sessionSecret = requireInConfig('sessionSecret');
 const redirectUri = requireInConfig('redirectUri');
 
 // set fb options
@@ -39,12 +36,6 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(morgan('dev'));
-app.use(session({
-  resave: true,
-  saveUninitialized: true,
-  secret: sessionSecret,
-  store: new FileStore()
-}));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
