@@ -42,23 +42,14 @@ module.exports = (req, res, next) => {
     },
     function getKeys (err, response) {
       if (err) throw err;
-      const {
-        friends
-      } = response.data;
+      const friends = response.data;
       const options = {
         access_token: req.session.access_token,
         fields: 'public_key'
       };
       const group = this.group();
       friends.forEach(user => {
-        FB.napi('/' + user.id, options, (err, response) => {
-          const key = {
-            name: user.name,
-            id: user.id,
-            key: response.public_key
-          };
-          return group()(err, key);
-        });
+        FB.napi('/' + user.id, options, group());
       });
     },
     function showKeys (err, keys) {
